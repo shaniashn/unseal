@@ -13,7 +13,7 @@ Unseal is a web application that allows users to create time-locked messages tha
 
 ## 🚀 Demo
 
-[Live Demo](your-demo-url-here) | [Screenshots](link-to-screenshots)
+[Work in Progress]
 
 ## 🛠️ Tech Stack
 
