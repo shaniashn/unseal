@@ -8,7 +8,6 @@ Unseal is a web application that allows users to create time-locked messages tha
 
 - **📝 Multi-format Messages**: Create text, audio, or video messages
 - **⏰ Flexible Scheduling**: Set delivery dates days, months, or years in the future
-- **📧 Multiple Delivery Options**: Messages can be revealed in-app or sent via email
 - **🔒 Secure Storage**: Messages are safely stored until their reveal date
 - **📱 Modern Interface**: Clean, intuitive design built with Vue 3
 
