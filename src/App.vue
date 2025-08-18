@@ -28,6 +28,8 @@ onMounted(() => {
     } else if (event === 'SIGNED_IN') {
       console.log('User signed in - redirecting to home page')
       router.push('/home')
+    } else if (event === 'INITIAL_SESSION') {
+      console.log('User is already signed in - redirecting to home page')
     }
   })
 })

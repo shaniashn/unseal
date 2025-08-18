@@ -75,6 +75,7 @@
       />
       <button type="submit">Sign In</button>
       <span>Don't have an account? <a v-on:click="refreshPage">Sign Up</a></span>
+      <span>Forgot password? <a v-on:click="resetPassword">Reset Password</a></span>
     </form>
   </div>
 </template>
@@ -152,6 +153,9 @@ export default {
     },
     refreshPage() {
       this.isRegister = !this.isRegister
+    },
+    resetPassword() {
+      router.push('/reset-password')
     },
   },
   props: {
