@@ -43,5 +43,13 @@ onMounted(() => {
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: antiquewhite;
+  color: #333333;
+}
+
+button,
+input,
+label {
+  color: #333333;
+  font-family: 'Montserrat', sans-serif;
 }
 </style>

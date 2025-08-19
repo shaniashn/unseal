@@ -2,6 +2,15 @@
   <div id="signup-form" v-if="isRegister">
     <form action="submit" @submit.prevent="handleSubmit">
       <div v-if="message">{{ message }}</div>
+      <label for="full_name">Full Name</label>
+      <input
+        type="text"
+        name="full_name"
+        id="full_name"
+        v-model="signUpFormData.full_name"
+        autocomplete="name"
+        required
+      />
       <label for="username">Username</label>
       <input
         type="text"
@@ -29,18 +38,8 @@
         autocomplete="new-password"
       />
 
-      <label for="full_name">Full Name</label>
-      <input
-        type="text"
-        name="full_name"
-        id="full_name"
-        v-model="signUpFormData.full_name"
-        autocomplete="name"
-        required
-      />
-
       <button type="submit">Sign Up</button>
-      <span>Already have an account? <a v-on:click="refreshPage">Sign In</a></span>
+      <span>Already have an account? <a @click="refreshPage">Sign In</a></span>
     </form>
   </div>
 
@@ -214,13 +213,11 @@ export default {
 #signup-form input:focus,
 #signin-form input:focus {
   outline: none;
-  border-color: #333333;
   box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.1);
 }
 
 #signup-form button,
 #signin-form button {
-  background-color: #333333;
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -228,6 +225,7 @@ export default {
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  background-color: #333333;
   transition: background-color 0.2s ease;
   margin-top: 24px;
   margin-bottom: 16px;
