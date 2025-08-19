@@ -41,6 +41,7 @@ onMounted(() => {
 
 <style>
 body {
+  font-family: 'Montserrat', sans-serif;
   background-color: antiquewhite;
 }
 </style>
