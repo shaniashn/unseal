@@ -1,6 +1,6 @@
 <template>
-  <div v-if="currentStep === 'request'">
-    <h1>Reset Password</h1>
+  <div v-if="currentStep === 'request'" class="reset-password-container">
+    <h2>Reset Password</h2>
     <div v-if="message" :class="messageClass">{{ message }}</div>
     <form @submit.prevent="requestReset">
       <input type="email" v-model="email" placeholder="Email" autocomplete="email" required />
@@ -9,11 +9,11 @@
       </button>
     </form>
     <div class="back-to-login">
-      <a @click="goToLogin" :disabled="loading || !email">Back to login</a>
+      <span><a @click="goToLogin" :disabled="loading || !email">Back to login</a></span>
     </div>
   </div>
 
-  <div v-else-if="currentStep === 'sent'">
+  <div v-else-if="currentStep === 'sent'" class="reset-password-container">
     <h1>Check your email</h1>
     <p>
       We've sent a password reset link to <strong>{{ email }}</strong>
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div v-else-if="currentStep === 'reset'">
+  <div v-else-if="currentStep === 'reset'" class="reset-password-container">
     <h1>Set up new password</h1>
     <p>Enter your new password below.</p>
     <div v-if="message" :class="messageClass">{{ message }}</div>
@@ -56,7 +56,7 @@
     </form>
   </div>
 
-  <div v-else-if="currentStep === 'success'">
+  <div v-else-if="currentStep === 'success'" class="reset-password-container">
     <h1>Password updated</h1>
     <p>Your password has been successfully updated.</p>
     <p>You can now sign in with your new password.</p>
@@ -192,4 +192,59 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.reset-password-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 400px;
+  min-width: 320px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.reset-password-container h2 {
+  margin-bottom: 15%;
+  text-align: center;
+}
+
+.reset-password-container form {
+  display: grid;
+  gap: 8px;
+}
+
+.reset-password-container input {
+  padding: 12px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+  background-color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.reset-password-container button {
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.back-to-login {
+  text-align: center;
+  margin-top: 16px;
+  cursor: pointer;
+}
+</style>
