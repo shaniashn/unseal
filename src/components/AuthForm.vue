@@ -47,15 +47,6 @@
   <div id="signin-form" v-if="!isRegister">
     <form action="submit" @submit.prevent="handleSubmit">
       <div v-if="message">{{ message }}</div>
-      <!-- <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        v-model="signInFormData.username"
-        autocomplete="username"
-        required
-      /> -->
       <label for="email">Email</label>
       <input
         type="email"
@@ -74,8 +65,12 @@
         autocomplete="new-password"
       />
       <button type="submit">Sign In</button>
-      <span>Don't have an account? <a v-on:click="refreshPage">Sign Up</a></span>
-      <span>Forgot password? <a v-on:click="resetPassword">Reset Password</a></span>
+      <div class="signup-link">
+        <span>Don't have an account? <a v-on:click="refreshPage">Sign Up</a></span>
+      </div>
+      <div class="reset-password-link">
+        <span>Forgot password? <a v-on:click="resetPassword">Reset Password</a></span>
+      </div>
     </form>
   </div>
 </template>
@@ -168,3 +163,122 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#signup-form,
+#signin-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 400px;
+  min-width: 320px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#signup-form form,
+#signin-form form {
+  display: grid;
+  gap: 8px;
+}
+
+#signup-form label,
+#signin-form label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+#signup-form label:first-of-type,
+#signin-form label:first-of-type {
+  margin-top: 0;
+}
+
+#signup-form input,
+#signin-form input {
+  padding: 12px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+  background-color: #ffffff;
+  margin-bottom: 4px;
+}
+
+#signup-form input:focus,
+#signin-form input:focus {
+  outline: none;
+  border-color: #333333;
+  box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.1);
+}
+
+#signup-form button,
+#signin-form button {
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#signup-form button:hover,
+#signin-form button:hover {
+  background-color: #222222;
+}
+
+#signup-form a,
+#signin-form a {
+  color: #333333;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+#signup-form a:hover,
+#signin-form a:hover {
+  color: #000000;
+}
+
+#signup-form span,
+#signin-form span {
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+}
+
+.signup-link,
+.reset-password-link {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.reset-password-link {
+  margin-top: 8px;
+}
+
+#signup-form div[v-if='message'],
+#signin-form div[v-if='message'] {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #495057;
+  text-align: center;
+}
+</style>
