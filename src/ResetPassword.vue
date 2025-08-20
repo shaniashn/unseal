@@ -3,6 +3,7 @@
     <h2>Reset Password</h2>
     <div v-if="message" :class="messageClass">{{ message }}</div>
     <form @submit.prevent="requestReset">
+      <label for="email">Your email</label>
       <input type="email" v-model="email" placeholder="Email" autocomplete="email" required />
       <button type="submit" :disabled="loading || !email">
         {{ loading ? 'Sending...' : 'Send reset link' }}
@@ -214,7 +215,7 @@ onMounted(() => {
 
 .reset-password-container form {
   display: grid;
-  gap: 8px;
+  gap: 15px;
 }
 
 .reset-password-container input {
@@ -237,9 +238,13 @@ onMounted(() => {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-top: 24px;
-  margin-bottom: 16px;
   font-family: 'Montserrat', sans-serif;
+}
+
+.reset-password-container .actions {
+  display: grid;
+  gap: 15px;
+  margin-top: 30px;
 }
 
 .back-to-login {
