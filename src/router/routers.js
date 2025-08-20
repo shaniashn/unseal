@@ -3,6 +3,7 @@ import AuthForm from '@/components/AuthForm.vue';
 import RootPage from '@/RootPage.vue';
 import HomePage from '@/HomePage.vue';
 import ResetPassword from '@/ResetPassword.vue';
+import CapsuleForm from '@/CapsuleForm.vue';
 import { supabase } from '@/lib/supabaseClient'
 
 const routes = [
@@ -29,6 +30,11 @@ const routes = [
     component: ResetPassword,
     path: '/reset-password',
   },
+  {
+    name: 'CapsuleForm',
+    component: CapsuleForm,
+    path: '/capsule-form'
+  }
 ];
 
 const router = createRouter({

@@ -1,6 +1,6 @@
 <template>
   <div id="signup-form" v-if="isRegister">
-    <form action="submit" @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <div v-if="message">{{ message }}</div>
       <label for="full_name">Full Name</label>
       <input
@@ -44,7 +44,7 @@
   </div>
 
   <div id="signin-form" v-if="!isRegister">
-    <form action="submit" @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <div v-if="message">{{ message }}</div>
       <label for="email">Email</label>
       <input
