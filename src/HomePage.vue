@@ -1,10 +1,13 @@
 <template>
   <section>Hi {{ fullname }}</section>
   <button @click="signOut">Sign Out</button>
+
+  <button @click="goToCapsule">Create new capsule</button>
 </template>
 
 <script>
 import { supabase } from '@/lib/supabaseClient'
+// import router from './router/routers'
 
 export default {
   name: 'HomePage',
@@ -23,6 +26,10 @@ export default {
         console.log('Signed out')
       }
       // No need to manually redirect here - the global auth state listener in App.vue will handle it
+    },
+    goToCapsule() {
+      // router.push('/capsule-form')
+      this.$router.push('/capsule-form')
     },
   },
   async mounted() {
