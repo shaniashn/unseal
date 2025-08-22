@@ -22,7 +22,7 @@
     <p>Click the link in the email to reset your password.</p>
     <div class="actions">
       <button @click="currentStep = 'request'">Send another email</button>
-      <button @click="goToLogin">Back to login</button>
+      <router-link to="/auth">Back to login</router-link>
     </div>
   </div>
 
@@ -251,5 +251,16 @@ onMounted(() => {
   text-align: center;
   margin-top: 16px;
   cursor: pointer;
+}
+
+.reset-password-container a {
+  color: #333333;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+.reset-password-container a:hover {
+  text-decoration: underline;
 }
 </style>
