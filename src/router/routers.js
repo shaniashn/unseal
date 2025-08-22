@@ -24,17 +24,24 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    children: [
+      {
+        name: 'CapsuleForm',
+        component: CapsuleForm,
+        path: '/capsule-form'
+      }
+    ]
   },
   {
     name: 'ResetPassword',
     component: ResetPassword,
     path: '/reset-password',
   },
-  {
-    name: 'CapsuleForm',
-    component: CapsuleForm,
-    path: '/capsule-form'
-  }
+  // {
+  //   name: 'CapsuleForm',
+  //   component: CapsuleForm,
+  //   path: '/capsule-form'
+  // }
 ];
 
 const router = createRouter({
