@@ -28,10 +28,21 @@ onMounted(() => {
       console.log('User signed out - redirecting to auth page')
       router.push('/auth')
     } else if (event === 'SIGNED_IN') {
-      console.log('User signed in - redirecting to home page')
-      router.push('/home')
+      // Only redirect to home if user is currently on auth page
+      // This handles the case where user just logged in
+      const currentPath = router.currentRoute.value.path
+      if (currentPath === '/auth' || currentPath === '/') {
+        console.log('User signed in from auth page - redirecting to home')
+        router.push('/home')
+      } else {
+        console.log('User signed in but already on protected page - staying here:', currentPath)
+      }
     } else if (event === 'INITIAL_SESSION') {
-      console.log('User is already signed in - redirecting to home page')
+      console.log(
+        'INITIAL_SESSION detected - staying on current page:',
+        router.currentRoute.value.path,
+      )
+      // Don't redirect on INITIAL_SESSION - user is already where they want to be
     }
   })
 })
