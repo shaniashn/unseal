@@ -29,7 +29,7 @@ export default {
     },
     goToCapsule() {
       // router.push('/capsule-form')
-      this.$router.push('/capsule-form')
+      this.$router.push('/home/capsule-form')
     },
   },
   async mounted() {
