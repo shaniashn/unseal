@@ -47,7 +47,7 @@ const router = createRouter({
 const isAuthenticated = async () => {
   try {
     const { data } = await supabase.auth.getSession()
-    console.log('router guard - session data', data)
+    // console.log('router guard - session data', data)
     return data.session != null
   } catch (error) {
     console.error('Error getting session: ', error)
@@ -56,13 +56,16 @@ const isAuthenticated = async () => {
 }
 
 router.beforeEach(async (to, from, next) => {
+  console.log(`Router guard: ${from.path} → ${to.path}`)
+
   // if the route requires auth and the user is not authenticated, redirect to the auth page
   if (to.meta.requiresAuth && !(await isAuthenticated())) {
-    console.log('redirecting to auth page')
+    console.log('User not authenticated - redirecting to auth page')
     next('/auth')
   }
   // if the route does not require auth or the user is authenticated, allow access to the route
   else {
+    console.log('Access granted to:', to.path)
     next()
   }
 })

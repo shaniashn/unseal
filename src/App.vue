@@ -12,8 +12,8 @@ onMounted(() => {
   supabase.auth.getSession().then(({ data, error }) => {
     try {
       session.value = data.session
-      console.log('app - session', session.value)
-      console.log('app - data', data)
+      // console.log('app - session', session.value)
+      // console.log('app - data', data)
     } catch {
       console.error('Error getting session: ', error)
     }
@@ -21,28 +21,31 @@ onMounted(() => {
 
   // Listen for auth state changes globally
   supabase.auth.onAuthStateChange((event, sessionData) => {
-    console.log('Auth state changed:', event, sessionData)
+    console.log('Auth state changed:', event, 'on path:', router.currentRoute.value.path)
     session.value = sessionData
 
     if (event === 'SIGNED_OUT') {
       console.log('User signed out - redirecting to auth page')
       router.push('/auth')
-    } else if (event === 'SIGNED_IN') {
-      // Only redirect to home if user is currently on auth page
-      // This handles the case where user just logged in
-      const currentPath = router.currentRoute.value.path
-      if (currentPath === '/auth' || currentPath === '/') {
-        console.log('User signed in from auth page - redirecting to home')
-        router.push('/home')
-      } else {
-        console.log('User signed in but already on protected page - staying here:', currentPath)
-      }
     } else if (event === 'INITIAL_SESSION') {
       console.log(
         'INITIAL_SESSION detected - staying on current page:',
         router.currentRoute.value.path,
       )
       // Don't redirect on INITIAL_SESSION - user is already where they want to be
+    } else if (event === 'TOKEN_REFRESHED') {
+      console.log('TOKEN_REFRESHED - staying on current page:', router.currentRoute.value.path)
+      // Don't redirect on token refresh - user should stay where they are
+    } else if (event === 'SIGNED_IN') {
+      // Only redirect to home if user is currently on auth page or root
+      // This handles the case where user just logged in from the auth form
+      const currentPath = router.currentRoute.value.path
+      if (currentPath === '/auth' || currentPath === '/') {
+        console.log('User signed in from auth/root - redirecting to home')
+        router.push('/home')
+      } else {
+        console.log('User signed in but already on protected page - staying here:', currentPath)
+      }
     }
   })
 })
