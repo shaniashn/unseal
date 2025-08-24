@@ -1,11 +1,11 @@
 <template>
-  <section v-if="status == sent">
+  <section v-if="status == 'sent'">
     <div class="sent-text">
       <p>Capsule sent successfully to the future!</p>
       <p>Capsule can be opened on {{ date }}</p>
     </div>
   </section>
-  <section class="capsule-form-page" v-else-if="status == editing">
+  <section class="capsule-form-page" v-else-if="status == 'editing'">
     <router-link to="/home">back to home</router-link>
     <div class="capsule-container">
       <form @submit.prevent="">
@@ -25,14 +25,15 @@
         />
 
         <span>Open date</span>
-        <input type="date" name="date-open" id="date-open" required />
-        <button type="submit" @click="sendMsg"></button>
+        <input v-model="date" type="date" name="date-open" id="date-open" required />
+        <button type="submit" @click="sendMsg">Send message</button>
       </form>
     </div>
   </section>
 </template>
 
 <script>
+import { supabase } from './lib/supabaseClient'
 export default {
   name: 'CapsuleForm',
   data() {
@@ -45,7 +46,7 @@ export default {
     }
   },
   methods: {
-    sendMsg() {
+    async sendMsg() {
       if (!this.fieldsCheck) return
 
       this.loading = true
@@ -54,7 +55,33 @@ export default {
       console.log('message', this.message)
       console.log('date', this.date)
 
-      // await supabase.
+      const userId = this.getUser()
+
+      const { data: capsule, error } = await supabase.from('capsules').insert({
+        id: userId,
+        title: 'title capsule',
+        message: 'message capsule',
+        date: this.date,
+      })
+
+      if (error) {
+        console.error('Error sending msg', error)
+      } else {
+        console.log('data capsule', capsule)
+      }
+    },
+    async checkUser() {
+      const { data } = await supabase.auth.getUser()
+      console.log('get user response', data.id)
+    },
+    async getUser() {
+      const { data, error } = await supabase.auth.getUser()
+
+      if (error) {
+        console.error('Error getting user data', error)
+        return
+      }
+      return data.user.id
     },
   },
   computed: {
@@ -62,9 +89,11 @@ export default {
       return this.title && this.message && this.date
     },
   },
-  mounted() {
-    console.log('testt')
-  },
+  // mounted() {
+  // console.log('testt')
+  // console.log(this.status)
+  // this.checkUser()
+  // },
 }
 </script>
 
