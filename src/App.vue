@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 
 const session = ref()
 const router = useRouter()
+const isInitialLoad = ref(true)
 
 onMounted(() => {
   // Get initial session
@@ -24,15 +25,16 @@ onMounted(() => {
     console.log('Auth state changed:', event, 'on path:', router.currentRoute.value.path)
     session.value = sessionData
 
-    if (event === 'SIGNED_OUT') {
-      console.log('User signed out - redirecting to auth page')
-      router.push('/auth')
-    } else if (event === 'INITIAL_SESSION') {
+    if (event === 'INITIAL_SESSION') {
+      // Don't redirect on INITIAL_SESSION - user is already where they want to be
       console.log(
         'INITIAL_SESSION detected - staying on current page:',
         router.currentRoute.value.path,
       )
-      // Don't redirect on INITIAL_SESSION - user is already where they want to be
+      isInitialLoad.value = false
+    } else if (event === 'SIGNED_OUT') {
+      console.log('User signed out - redirecting to auth page')
+      router.push('/auth')
     } else if (event === 'TOKEN_REFRESHED') {
       console.log('TOKEN_REFRESHED - staying on current page:', router.currentRoute.value.path)
       // Don't redirect on token refresh - user should stay where they are
@@ -40,11 +42,12 @@ onMounted(() => {
       // Only redirect to home if user is currently on auth page or root
       // This handles the case where user just logged in from the auth form
       const currentPath = router.currentRoute.value.path
-      if (currentPath === '/auth' || currentPath === '/') {
+      if ((currentPath === '/auth' || currentPath === '/') && !isInitialLoad.value) {
         console.log('User signed in from auth/root - redirecting to home')
         router.push('/home')
       } else {
         console.log('User signed in but already on protected page - staying here:', currentPath)
+        isInitialLoad.value = false
       }
     }
   })
