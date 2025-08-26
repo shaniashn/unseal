@@ -55,24 +55,27 @@ export default {
       console.log('message', this.message)
       console.log('date', this.date)
 
-      const userId = this.getUser()
+      const userId = await this.getUser()
+      console.log('userid', userId)
 
-      const { data: capsule, error } = await supabase.from('capsules').insert({
-        id: userId,
-        title: 'title capsule',
-        message: 'message capsule',
-        date: this.date,
+      const response = await supabase.from('capsules').insert({
+        user_id: userId,
+        title: this.title,
+        message: this.message,
+        to_open_at: this.date,
       })
 
-      if (error) {
-        console.error('Error sending msg', error)
+      if (response.error) {
+        console.error('Error sending msg', response.error)
       } else {
-        console.log('data capsule', capsule)
+        console.log('data capsule created. status code: ', response.status)
       }
     },
     async checkUser() {
       const { data } = await supabase.auth.getUser()
-      console.log('get user response', data.id)
+      console.log('get user response', data.user.id)
+
+      console.log('date', this.date)
     },
     async getUser() {
       const { data, error } = await supabase.auth.getUser()
@@ -90,9 +93,7 @@ export default {
     },
   },
   // mounted() {
-  // console.log('testt')
-  // console.log(this.status)
-  // this.checkUser()
+  //   this.checkUser()
   // },
 }
 </script>
