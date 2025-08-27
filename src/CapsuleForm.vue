@@ -26,7 +26,7 @@
 
         <span>Open date</span>
         <input v-model="date" type="date" name="date-open" id="date-open" required />
-        <button type="submit" @click="sendMsg">Send message</button>
+        <button type="submit" @click="checkUser">Send message</button>
       </form>
     </div>
   </section>
@@ -69,13 +69,30 @@ export default {
         console.error('Error sending msg', response.error)
       } else {
         console.log('data capsule created. status code: ', response.status)
+        this.status = 'sent'
       }
     },
     async checkUser() {
-      const { data } = await supabase.auth.getUser()
-      console.log('get user response', data.user.id)
+      // const { data } = await supabase.auth.getUser()
+      // console.log('get user response', data.user.id)
 
       console.log('date', this.date)
+      console.log('date split', this.date.split())
+      const today = new Date()
+      const getdate = today.getDate()
+      const getmnth = today.getMonth()
+      const getyear = today.getFullYear()
+      const todayDate = `${getdate}-${getmnth}-${getyear}`
+
+      console.log('todayDateIs', todayDate)
+      // const dateIs = new Date(this.date)
+      const getdate2 = today.getDate()
+      const getmnth2 = today.getMonth()
+      const getyear2 = today.getFullYear()
+      const dateIs2 = `${getdate2}-${getmnth2}-${getyear2}`
+      console.log('dateIs', dateIs2)
+
+      console.log(todayDate === dateIs2)
     },
     async getUser() {
       const { data, error } = await supabase.auth.getUser()
