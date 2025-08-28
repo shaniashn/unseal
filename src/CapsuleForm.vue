@@ -25,7 +25,14 @@
         />
 
         <span>Open date</span>
-        <input v-model="date" type="date" name="date-open" id="date-open" required />
+        <input
+          v-model="date"
+          type="date"
+          name="date-open"
+          id="date-open"
+          :min="todayDate"
+          required
+        />
         <button type="submit" @click="checkUser">Send message</button>
       </form>
     </div>
@@ -73,26 +80,9 @@ export default {
       }
     },
     async checkUser() {
-      // const { data } = await supabase.auth.getUser()
-      // console.log('get user response', data.user.id)
-
-      console.log('date', this.date)
-      console.log('date split', this.date.split())
-      const today = new Date()
-      const getdate = today.getDate()
-      const getmnth = today.getMonth()
-      const getyear = today.getFullYear()
-      const todayDate = `${getdate}-${getmnth}-${getyear}`
-
-      console.log('todayDateIs', todayDate)
-      // const dateIs = new Date(this.date)
-      const getdate2 = today.getDate()
-      const getmnth2 = today.getMonth()
-      const getyear2 = today.getFullYear()
-      const dateIs2 = `${getdate2}-${getmnth2}-${getyear2}`
-      console.log('dateIs', dateIs2)
-
-      console.log(todayDate === dateIs2)
+      const { data } = await supabase.auth.getUser()
+      console.log('get user response', data.user.id)
+      return data.user.id
     },
     async getUser() {
       const { data, error } = await supabase.auth.getUser()
@@ -107,6 +97,13 @@ export default {
   computed: {
     fieldsCheck() {
       return this.title && this.message && this.date
+    },
+    todayDate() {
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
+      const day = String(today.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
   },
   // mounted() {
