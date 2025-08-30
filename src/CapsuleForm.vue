@@ -33,7 +33,7 @@
           :min="todayDate"
           required
         />
-        <button type="submit" @click="checkUser">Send message</button>
+        <button type="submit" @click="checkUser" :disabled="!fieldsCheck">Send message</button>
       </form>
     </div>
   </section>
@@ -62,21 +62,25 @@ export default {
       console.log('message', this.message)
       console.log('date', this.date)
 
-      const userId = await this.getUser()
-      console.log('userid', userId)
+      try {
+        const userId = await this.getUser()
+        console.log('userid', userId)
 
-      const response = await supabase.from('capsules').insert({
-        user_id: userId,
-        title: this.title,
-        message: this.message,
-        to_open_at: this.date,
-      })
+        const response = await supabase.from('capsules').insert({
+          user_id: userId,
+          title: this.title,
+          message: this.message,
+          to_open_at: this.date,
+        })
 
-      if (response.error) {
-        console.error('Error sending msg', response.error)
-      } else {
-        console.log('data capsule created. status code: ', response.status)
-        this.status = 'sent'
+        if (response.error) {
+          console.error('Error sending msg', response.error)
+        } else {
+          console.log('data capsule created. status code: ', response.status)
+          this.status = 'sent'
+        }
+      } catch (error) {
+        console.error('Error sending msg', error)
       }
     },
     async checkUser() {
@@ -85,13 +89,18 @@ export default {
       return data.user.id
     },
     async getUser() {
-      const { data, error } = await supabase.auth.getUser()
+      try {
+        const { data, error } = await supabase.auth.getUser()
 
-      if (error) {
-        console.error('Error getting user data', error)
+        if (error) {
+          console.error('Error getting user data', error)
+          return
+        }
+        return data.user.id
+      } catch (error) {
+        console.error('Error getting user', error)
         return
       }
-      return data.user.id
     },
   },
   computed: {
@@ -102,13 +111,10 @@ export default {
       const today = new Date()
       const year = today.getFullYear()
       const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
-      const day = String(today.getDate()).padStart(2, '0')
+      const day = String(today.getDate() + 1).padStart(2, '0')
       return `${year}-${month}-${day}`
     },
   },
-  // mounted() {
-  //   this.checkUser()
-  // },
 }
 </script>
 
