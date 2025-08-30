@@ -33,7 +33,7 @@
           :min="todayDate"
           required
         />
-        <button type="submit" @click="checkUser" :disabled="!fieldsCheck">Send message</button>
+        <button type="submit" @click="sendMsg" :disabled="!fieldsCheck">Send message</button>
       </form>
     </div>
   </section>
@@ -78,6 +78,7 @@ export default {
         } else {
           console.log('data capsule created. status code: ', response.status)
           this.status = 'sent'
+          console.log('capsule sent successfully', this.status)
         }
       } catch (error) {
         console.error('Error sending msg', error)
