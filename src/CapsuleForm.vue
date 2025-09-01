@@ -85,9 +85,20 @@ export default {
       }
     },
     async checkUser() {
-      const { data } = await supabase.auth.getUser()
-      console.log('get user response', data.user.id)
-      return data.user.id
+      try {
+        const { data, error } = await supabase.auth.getUser()
+
+        if (error) {
+          console.error('Error getting user data', error)
+          return null
+        }
+
+        console.log('get user response', data.user.id)
+        return data.user.id
+      } catch (error) {
+        console.error('Error in checkUser', error)
+        return null
+      }
     },
     async getUser() {
       try {
