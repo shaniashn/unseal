@@ -4,6 +4,12 @@
     <button @click="signOut">Sign Out</button>
     <router-link to="/capsule-form">Create new capsule</router-link>
   </section>
+  <section class="messages-container">
+    <div v-for="message in messages" :key="message" class="message-item">
+      <p>{{ message.text }}</p>
+      <p>{{ message.date }}</p>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -16,6 +22,26 @@ export default {
     return {
       fullname: '',
       status: 'editing',
+      message: {
+        id: '',
+        isOpened: false,
+        text: 'To be open at:',
+        date: '',
+      },
+      messages: [
+        {
+          id: '',
+          isOpened: false,
+          text: 'To be open at:',
+          date: '',
+        },
+        {
+          id: '',
+          isOpened: false,
+          text: 'To be open at:',
+          date: '',
+        },
+      ],
     }
   },
   methods: {
@@ -34,15 +60,6 @@ export default {
       this.$router.push('/home/capsule-form')
     },
   },
-  // async mounted() {
-  //   const { data } = await supabase.auth.getUser()
-
-  //   if (data.user) {
-  //     // Set fullname from user metadata or email
-  //     this.fullname = data.user.user_metadata?.full_name || data.user.email
-  //   }
-
-  //   console.log('getUser mounted homepage', data)
-  // },
+  async mounted() {},
 }
 </script>
