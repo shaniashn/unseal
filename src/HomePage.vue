@@ -5,7 +5,7 @@
     <router-link to="/capsule-form">Create new capsule</router-link>
   </section>
   <section class="messages-container">
-    <div v-for="message in messages" :key="message" class="message-item">
+    <div v-for="message in messages" :key="message.id" class="message-item">
       <p>{{ message.text }}</p>
       <p>{{ message.date }}</p>
     </div>
@@ -16,32 +16,31 @@
 import { supabase } from '@/lib/supabaseClient'
 // import router from './router/routers'
 
+const Status = Object.freeze({
+  EDITING: 'editing',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error',
+})
+
+const Text = Object.freeze({
+  LOCKED: 'To be open at:',
+  UNLOCKED: 'Opened',
+})
+
 export default {
   name: 'HomePage',
   data() {
     return {
       fullname: '',
-      status: 'editing',
+      status: Status.EDITING,
       message: {
         id: '',
-        isOpened: false,
-        text: 'To be open at:',
+        isLocked: false,
+        text: Text.LOCKED,
         date: '',
       },
-      messages: [
-        {
-          id: '',
-          isOpened: false,
-          text: 'To be open at:',
-          date: '',
-        },
-        {
-          id: '',
-          isOpened: false,
-          text: 'To be open at:',
-          date: '',
-        },
-      ],
+      messages: [],
     }
   },
   methods: {
@@ -59,7 +58,35 @@ export default {
       // router.push('/capsule-form')
       this.$router.push('/home/capsule-form')
     },
+    async fetchMessagesData() {
+      try {
+        this.status = Status.LOADING
+
+        const { data: msg, error } = await supabase.from('capsules').select()
+
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('msg: ', msg)
+        }
+
+        msg.forEach((data) => {
+          this.messages.push({
+            id: data.id,
+            date: data.to_open_at,
+            isLocked: data.isLocked,
+            text: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
+          })
+        })
+      } catch (error) {
+        console.error('Error fetching messages', error)
+      } finally {
+        this.status = Status.SUCCESS
+      }
+    },
   },
-  async mounted() {},
+  async mounted() {
+    await this.fetchMessagesData()
+  },
 }
 </script>
