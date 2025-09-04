@@ -14,7 +14,6 @@
 
 <script>
 import { supabase } from '@/lib/supabaseClient'
-// import router from './router/routers'
 
 const Status = Object.freeze({
   EDITING: 'editing',
@@ -74,8 +73,9 @@ export default {
           this.messages.push({
             id: data.id,
             date: data.to_open_at,
-            isLocked: data.isLocked,
-            text: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
+            isLocked: false,
+            // text: data.is_locked ? Text.LOCKED : Text.UNLOCKED,
+            text: Text.UNLOCKED,
           })
         })
       } catch (error) {
@@ -90,3 +90,16 @@ export default {
   },
 }
 </script>
+
+<style>
+.messages-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.message-item {
+  background-color: white;
+  padding: 25px;
+  margin: 10px;
+}
+</style>
