@@ -5,6 +5,7 @@ import HomePage from '@/HomePage.vue';
 import ResetPassword from '@/ResetPassword.vue';
 import CapsuleForm from '@/CapsuleForm.vue';
 import { supabase } from '@/lib/supabaseClient'
+import CapsuleView from '@/CapsuleView.vue';
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+  },
+  {
+    name: 'CapsuleView',
+    component: CapsuleView,
+    path: '/capsule-view'
   }
 ];
 
