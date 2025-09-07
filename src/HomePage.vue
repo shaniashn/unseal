@@ -8,6 +8,7 @@
     <div v-for="message in messages" :key="message.id" class="message-item">
       <p>{{ message.text }}</p>
       <p>{{ message.date }}</p>
+      <router-link to="/capsule-view">Open</router-link>
     </div>
   </section>
 </template>
@@ -61,27 +62,51 @@ export default {
       try {
         this.status = Status.LOADING
 
-        const { data: msg, error } = await supabase.from('capsules').select()
+        const userId = await this.getUserData()
+        console.log('userId', userId)
+
+        const { data: msg, error } = await supabase
+          .from('capsules')
+          .select('*') // Select all fields including title and message
+          .eq('user_id', userId.user)
 
         if (error) {
-          console.log(error)
+          console.log('error:', error)
         } else {
           console.log('msg: ', msg)
         }
 
-        msg.forEach((data) => {
-          this.messages.push({
+        // msg.forEach((data) => {
+        //   this.messages.push({
+        //     id: data.id,
+        //     date: data.to_open_at,
+        //     isLocked: false,
+        //     // text: data.is_locked ? Text.LOCKED : Text.UNLOCKED,
+        //     text: Text.UNLOCKED,
+        //   })
+        // })
+
+        this.message = msg.map((data) => {
+          return {
             id: data.id,
             date: data.to_open_at,
             isLocked: false,
-            // text: data.is_locked ? Text.LOCKED : Text.UNLOCKED,
-            text: Text.UNLOCKED,
-          })
+          }
         })
       } catch (error) {
         console.error('Error fetching messages', error)
       } finally {
         this.status = Status.SUCCESS
+      }
+    },
+    async getUserData() {
+      try {
+        const userId = await supabase.auth.getUser()
+        console.log('userId', userId)
+
+        return userId
+      } catch (error) {
+        console.error('Error getting user data:', error)
       }
     },
   },
