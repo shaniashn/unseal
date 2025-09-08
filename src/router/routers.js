@@ -42,7 +42,10 @@ const routes = [
   {
     name: 'CapsuleView',
     component: CapsuleView,
-    path: '/capsule-view'
+    path: '/capsule-view/:id',
+    meta: {
+      requiresAuth: true,
+    },
   }
 ];
 

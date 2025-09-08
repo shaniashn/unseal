@@ -8,7 +8,7 @@
     <div v-for="message in messages" :key="message.id" class="message-item">
       <p>{{ message.text }}</p>
       <p>{{ message.date }}</p>
-      <router-link to="/capsule-view">Open</router-link>
+      <router-link :to="`/capsule-view/${message.id}`">Open</router-link>
     </div>
   </section>
 </template>
@@ -63,12 +63,12 @@ export default {
         this.status = Status.LOADING
 
         const userId = await this.getUserData()
-        console.log('userId', userId)
+        console.log('userId', userId.data.user.id)
 
         const { data: msg, error } = await supabase
           .from('capsules')
           .select('*') // Select all fields including title and message
-          .eq('user_id', userId.user)
+          .eq('user_id', userId.data.user.id)
 
         if (error) {
           console.log('error:', error)
@@ -86,7 +86,7 @@ export default {
         //   })
         // })
 
-        this.message = msg.map((data) => {
+        this.messages = msg.map((data) => {
           return {
             id: data.id,
             date: data.to_open_at,
