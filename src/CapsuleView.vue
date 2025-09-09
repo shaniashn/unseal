@@ -53,6 +53,8 @@ export default {
           .eq('user_id', userData.user.id) // Ensure user owns this capsule
           .single()
 
+        console.log(data)
+
         if (error) {
           console.error('Error fetching capsule:', error)
         } else {
