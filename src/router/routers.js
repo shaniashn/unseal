@@ -5,7 +5,7 @@ import HomePage from '@/HomePage.vue';
 import ResetPassword from '@/ResetPassword.vue';
 import CapsuleForm from '@/CapsuleForm.vue';
 import { supabase } from '@/lib/supabaseClient'
-import CapsuleView from '@/CapsuleView.vue';
+import CapsuleView from '@/CapsuleVw.vue';
 
 const routes = [
   {
