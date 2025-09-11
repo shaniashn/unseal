@@ -8,7 +8,9 @@
     <div v-for="message in messages" :key="message.id" class="message-item">
       <p>{{ message.text }}</p>
       <p>{{ message.date }}</p>
-      <router-link :to="`/capsule-view/${message.id}`">Open</router-link>
+      <router-link :to="`/capsule-view/${message.id}`" v-if="message.isLocked">{{
+        message.status
+      }}</router-link>
     </div>
   </section>
 </template>
@@ -34,12 +36,12 @@ export default {
     return {
       fullname: '',
       status: Status.EDITING,
-      message: {
-        id: '',
-        isLocked: false,
-        text: Text.LOCKED,
-        date: '',
-      },
+      // message: {
+      //   id: '',
+      //   isLocked: true,
+      //   text: Text.LOCKED,
+      //   date: '',
+      // },
       messages: [],
     }
   },
@@ -76,21 +78,14 @@ export default {
           console.log('msg: ', msg)
         }
 
-        // msg.forEach((data) => {
-        //   this.messages.push({
-        //     id: data.id,
-        //     date: data.to_open_at,
-        //     isLocked: false,
-        //     // text: data.is_locked ? Text.LOCKED : Text.UNLOCKED,
-        //     text: Text.UNLOCKED,
-        //   })
-        // })
-
         this.messages = msg.map((data) => {
+          console.log('msg locked', data.to_open_at > this.todayDate)
+
           return {
             id: data.id,
             date: data.to_open_at,
-            isLocked: false,
+            isLocked: this.todayDate > data.to_open_at,
+            status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
           }
         })
       } catch (error) {
@@ -108,6 +103,15 @@ export default {
       } catch (error) {
         console.error('Error getting user data:', error)
       }
+    },
+  },
+  computed: {
+    todayDate() {
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
+      const day = String(today.getDate() + 1).padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
   },
   async mounted() {
