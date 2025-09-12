@@ -36,12 +36,6 @@ export default {
     return {
       fullname: '',
       status: Status.EDITING,
-      // message: {
-      //   id: '',
-      //   isLocked: true,
-      //   text: Text.LOCKED,
-      //   date: '',
-      // },
       messages: [],
     }
   },
@@ -54,10 +48,8 @@ export default {
       } else {
         console.log('Signed out success')
       }
-      // No need to manually redirect here - the global auth state listener in App.vue will handle it
     },
     goToCapsule() {
-      // router.push('/capsule-form')
       this.$router.push('/home/capsule-form')
     },
     async fetchMessagesData() {
@@ -75,19 +67,15 @@ export default {
         if (error) {
           console.log('error:', error)
         } else {
-          console.log('msg: ', msg)
+          this.messages = msg.map((data) => {
+            return {
+              id: data.id,
+              date: data.to_open_at,
+              isLocked: this.todayDate > data.to_open_at,
+              status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
+            }
+          })
         }
-
-        this.messages = msg.map((data) => {
-          console.log('msg locked', data.to_open_at > this.todayDate)
-
-          return {
-            id: data.id,
-            date: data.to_open_at,
-            isLocked: this.todayDate > data.to_open_at,
-            status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
-          }
-        })
       } catch (error) {
         console.error('Error fetching messages', error)
       } finally {
@@ -97,7 +85,6 @@ export default {
     async getUserData() {
       try {
         const userId = await supabase.auth.getUser()
-        console.log('userId', userId)
 
         return userId
       } catch (error) {

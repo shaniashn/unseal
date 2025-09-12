@@ -41,6 +41,7 @@
 
 <script>
 import { supabase } from './lib/supabaseClient'
+import router from './router/routers'
 export default {
   name: 'CapsuleForm',
   data() {
@@ -79,6 +80,7 @@ export default {
           console.log('data capsule created. status code: ', response.status)
           this.status = 'sent'
           console.log('capsule sent successfully', this.status)
+          router.push('/home')
         }
       } catch (error) {
         console.error('Error sending msg', error)
