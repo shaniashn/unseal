@@ -1,83 +1,67 @@
 <template>
   <section class="message-section">
-    <router-link to="/home" class="back-link">← Back to Home</router-link>
+    <router-link to="/home">Back to home</router-link>
 
-    <div v-if="loading" class="loading">Loading capsule...</div>
-
-    <div v-else-if="capsule" class="capsule-content">
-      <h2 class="capsule-title">{{ capsule.title }}</h2>
+    <div class="loading" v-if="loading">Loading..</div>
+    <div class="capsule-content" v-else-if="capsule">
+      <h3 class="capsule-title">{{ capsule.title }}</h3>
       <p class="capsule-message">{{ capsule.message }}</p>
-      <p class="capsule-date">Open date: {{ formatDate(capsule.to_open_at) }}</p>
+      <p class="capsule-date">Open date: {{ capsule.to_open_at }}</p>
     </div>
-
-    <div v-else class="error">Capsule not found or you don't have permission to view it.</div>
+    <div class="error" v-else>Capsule not found or you don't have permission to view it.</div>
   </section>
 </template>
 
-<script>
+<script setup>
+import { useRoute } from 'vue-router'
 import { supabase } from './lib/supabaseClient'
+import { onMounted, ref } from 'vue'
 
-export default {
-  name: 'CapsuleView',
-  data() {
-    return {
-      capsule: null,
-      loading: true,
+const route = useRoute()
+const capsule = ref('')
+const loading = ref('')
+
+async function fetchCapsule() {
+  try {
+    loading.value = true
+    const capsuleId = route.params.id
+    console.log('sss')
+
+    if (!capsuleId) {
+      console.log('capsule id not found')
+      return
     }
-  },
-  methods: {
-    async fetchCapsule() {
-      try {
-        const capsuleId = this.$route.params.id
 
-        if (!capsuleId) {
-          console.error('No capsule ID provided')
-          this.loading = false
-          return
-        }
+    const { data: userData, error: userError } = await supabase.auth.getUser()
 
-        // Get current user to ensure they own this capsule
-        const { data: userData, error: userError } = await supabase.auth.getUser()
+    if (userError) {
+      console.error('error getting user', userError)
+      return
+    }
 
-        if (userError) {
-          console.error('Error getting user:', userError)
-          this.loading = false
-          return
-        }
+    const { data, error } = await supabase
+      .from('capsules')
+      .select()
+      .eq('id', capsuleId)
+      .eq('user_id', userData.user.id)
 
-        // Fetch capsule data with user validation
-        const { data, error } = await supabase
-          .from('capsules')
-          .select('*')
-          .eq('id', capsuleId)
-          .eq('user_id', userData.user.id) // Ensure user owns this capsule
-          .single()
+    console.log('data', data)
 
-        console.log(data)
-
-        if (error) {
-          console.error('Error fetching capsule:', error)
-        } else {
-          this.capsule = data
-        }
-      } catch (error) {
-        console.error('Error:', error)
-      } finally {
-        this.loading = false
-      }
-    },
-    formatDate(dateString) {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    },
-  },
-  async mounted() {
-    await this.fetchCapsule()
-  },
+    if (error) {
+      console.error('error getting capsule data', error)
+    } else {
+      capsule.value = data[0]
+    }
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
 }
+
+onMounted(async () => {
+  await fetchCapsule()
+})
 </script>
 
 <style scoped>
