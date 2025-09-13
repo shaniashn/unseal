@@ -38,7 +38,7 @@
         autocomplete="new-password"
       />
 
-      <button type="submit">Sign Up</button>
+      <button type="submit" :disabled="!checkFields">Sign Up</button>
       <span>Already have an account? <a @click="refreshPage">Sign In</a></span>
     </form>
   </div>
@@ -63,7 +63,10 @@
         v-model="signInFormData.password"
         autocomplete="new-password"
       />
-      <button type="submit">Sign In</button>
+      <button type="submit" :disabled="!checkFields">Sign In</button>
+      <div class="error-msg" v-if="status == 'error'">
+        <p>Email or password is wrong.</p>
+      </div>
       <div class="signup-link">
         <span>Don't have an account? <a v-on:click="refreshPage">Sign Up</a></span>
       </div>
@@ -97,11 +100,14 @@ export default {
         username: '',
         full_name: '',
       },
+      status: '',
     }
   },
   methods: {
     async handleSubmit() {
       try {
+        console.log('click')
+
         if (this.isRegister) {
           const response = await supabase.auth.signUp({
             email: this.signUpFormData.email,
@@ -137,6 +143,7 @@ export default {
             // No need to manually redirect - global auth state listener will handle it
           } else {
             console.error('Sign in error: ', response.error)
+            this.status = 'error'
           }
 
           // console.log('AuthForm - Response: ', response)
@@ -155,6 +162,20 @@ export default {
   props: {
     user: {
       username: '',
+    },
+  },
+  computed: {
+    checkFields() {
+      if (this.isRegister) {
+        return (
+          this.signUpFormData.email &&
+          this.signUpFormData.password &&
+          this.signUpFormData.username &&
+          this.signUpFormData.full_name
+        )
+      } else {
+        return this.signInFormData.email && this.signInFormData.password
+      }
     },
   },
   mounted() {
@@ -216,6 +237,10 @@ export default {
   box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.1);
 }
 
+#signin-form .error-msg p {
+  color: rgb(206, 46, 46);
+}
+
 #signup-form button,
 #signin-form button {
   color: #ffffff;
@@ -230,6 +255,22 @@ export default {
   margin-top: 24px;
   margin-bottom: 16px;
   font-family: 'Montserrat', sans-serif;
+}
+
+#signup-form button:disabled,
+#signin-form button:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#signup-form button:disabled:hover,
+#signin-form button:disabled:hover {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 #signup-form button:hover,
