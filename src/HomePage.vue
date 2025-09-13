@@ -11,6 +11,10 @@
       <router-link :to="`/capsule-view/${message.id}`" v-if="message.isLocked">{{
         message.status
       }}</router-link>
+
+      <div class="locked" v-else>
+        <p>Locked</p>
+      </div>
     </div>
   </section>
 </template>
