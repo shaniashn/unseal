@@ -11,6 +11,7 @@
       <form @submit.prevent="">
         <input type="image" src="" />
         <input type="file" accept="image/png, image/jpeg" />
+
         <input
           type="text"
           id="title-message"
