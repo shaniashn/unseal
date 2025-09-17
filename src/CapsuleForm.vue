@@ -9,8 +9,8 @@
     <router-link to="/home">back to home</router-link>
     <div class="capsule-container">
       <form @submit.prevent="">
-        <input type="image" src="" />
-        <input type="file" accept="image/png, image/jpeg" />
+        <input type="image" :src="image" />
+        <input type="file" id="imageInput" accept="image/png, image/jpeg" @change="loadImage" />
 
         <input
           type="text"
@@ -54,29 +54,25 @@ export default {
       status: 'editing',
       date: '',
       loading: false,
+      image: '',
     }
   },
   methods: {
     async sendMsg() {
       if (!this.fieldsCheck) return
-
       this.loading = true
-
       console.log('title', this.title)
       console.log('message', this.message)
       console.log('date', this.date)
-
       try {
         const userId = await this.getUser()
         console.log('userid', userId)
-
         const response = await supabase.from('capsules').insert({
           user_id: userId,
           title: this.title,
           message: this.message,
           to_open_at: this.date,
         })
-
         if (response.error) {
           console.error('Error sending msg', response.error)
         } else {
@@ -119,6 +115,15 @@ export default {
         return
       }
     },
+    loadImage() {
+      const input = document.getElementById('imageInput')
+      const reader = new FileReader()
+      reader.onload = () => {
+        this.image = reader.result
+      }
+
+      reader.readAsDataURL(input.files[0])
+    },
   },
   computed: {
     fieldsCheck() {
@@ -132,6 +137,7 @@ export default {
       return `${year}-${month}-${day}`
     },
   },
+  mounted() {},
 }
 </script>
 
@@ -139,5 +145,11 @@ export default {
 .capsule-container form {
   display: flex;
   flex-direction: column;
+}
+
+.capsule-container form input[type='image'] {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
 }
 </style>
