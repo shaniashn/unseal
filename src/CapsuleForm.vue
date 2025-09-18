@@ -9,7 +9,7 @@
     <router-link to="/home">back to home</router-link>
     <div class="capsule-container">
       <form @submit.prevent="">
-        <input type="image" :src="image" />
+        <input type="image" :src="image" v-if="image" alt="image" />
         <input type="file" id="imageInput" accept="image/png, image/jpeg" @change="loadImage" />
 
         <input
