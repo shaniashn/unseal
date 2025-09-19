@@ -116,14 +116,25 @@ export default {
       }
     },
     loadImage() {
-      const input = document.getElementById('imageInput')
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.image = reader.result
+      // const input = document.getElementById('imageInput')
+      // const reader = new FileReader()
+      // reader.onload = () => {
+
+      //   this.image = reader.result
+      // }
+
+      // reader.readAsDataURL(input.files[0])
+
+      this.image = event
+    },
+    async uploadImage() {
+      const input = document.getElementById('imageInput');
+      if(!input.files) {
+        return
       }
 
-      reader.readAsDataURL(input.files[0])
-    },
+      const { data, error }
+    }
   },
   computed: {
     fieldsCheck() {
