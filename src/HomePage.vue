@@ -6,15 +6,17 @@
   </section>
   <section class="messages-container">
     <div v-for="message in messages" :key="message.id" class="message-item">
-      <p>{{ message.text }}</p>
+      <!-- <p>{{ message.text }}</p> -->
       <p>{{ message.date }}</p>
       <router-link :to="`/capsule-view/${message.id}`" v-if="message.isLocked">{{
         message.status
       }}</router-link>
 
+      <!-- <router-link :to="`/capsule-view/${message.id}`" v-if="message.isLocked">haha</router-link>
+
       <div class="locked" v-else>
         <p>Locked</p>
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
@@ -72,10 +74,14 @@ export default {
           console.log('error:', error)
         } else {
           this.messages = msg.map((data) => {
+            console.log('to open at', data.to_open_at)
+            console.log('today', this.todayDate)
+
             return {
               id: data.id,
               date: data.to_open_at,
-              isLocked: this.todayDate > data.to_open_at,
+              // isLocked: this.todayDate > data.to_open_at,
+              isLocked: true,
               status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
             }
           })

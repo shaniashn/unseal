@@ -11,6 +11,7 @@
       <form @submit.prevent="">
         <input type="image" :src="image" v-if="image" alt="image" />
         <input type="file" id="imageInput" accept="image/png, image/jpeg" @change="loadImage" />
+        <!-- <button type="submit" @click="uploadImage">upload img</button> -->
 
         <input
           type="text"
@@ -64,15 +65,24 @@ export default {
       console.log('title', this.title)
       console.log('message', this.message)
       console.log('date', this.date)
+
       try {
         const userId = await this.getUser()
-        console.log('userid', userId)
+        const imagePath = await this.uploadImage()
+
+        if (!imagePath) {
+          console.error('Error uploading image')
+          return
+        }
+
         const response = await supabase.from('capsules').insert({
           user_id: userId,
           title: this.title,
           message: this.message,
           to_open_at: this.date,
+          image: imagePath,
         })
+
         if (response.error) {
           console.error('Error sending msg', response.error)
         } else {
@@ -115,26 +125,70 @@ export default {
         return
       }
     },
-    loadImage() {
+    loadImage(event) {
+      // this.image = event.target.files[0]
+      const reader = new FileReader()
+
+      reader.addEventListener('load', () => {
+        this.image = reader.result
+      })
+
+      reader.readAsDataURL(event.target.files[0])
+
       // const input = document.getElementById('imageInput')
       // const reader = new FileReader()
+
       // reader.onload = () => {
 
       //   this.image = reader.result
       // }
 
       // reader.readAsDataURL(input.files[0])
-
-      this.image = event
     },
     async uploadImage() {
-      const input = document.getElementById('imageInput');
-      if(!input.files) {
+      const input = document.getElementById('imageInput')
+      this.image = input.files[0]
+      console.log('image ', this.image.name)
+
+      if (!input.files) {
         return
       }
 
-      const { data, error }
-    }
+      try {
+        //Upload to Firebase Storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('capsule_images')
+          .upload(`image/${this.image.name}`, this.image)
+
+        if (uploadError) {
+          console.error('Upload failed:', uploadError)
+        }
+
+        //Get public URL of the uploaded file
+        const { data: publicUrlData } = await supabase.storage
+          .from('capsule_images')
+          .getPublicUrl(uploadData.path)
+
+        const imagePath = publicUrlData.publicUrl
+        console.log('imagePath', imagePath)
+
+        return imagePath
+
+        //Insert image path to database
+        // const { data: dbData, error: dbError } = await supabase
+        //   .from('capsules')
+        //   .insert({ image: publicUrlData })
+
+        // if (dbError) {
+        //   console.error('Inser image path failed:', dbError)
+        // } else {
+        //   console.log('dbData', dbData)
+        // }
+      } catch (error) {
+        console.error('Error: ', error)
+        return null
+      }
+    },
   },
   computed: {
     fieldsCheck() {
