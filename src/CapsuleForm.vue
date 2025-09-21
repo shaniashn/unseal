@@ -46,6 +46,7 @@
 <script>
 import { supabase } from './lib/supabaseClient'
 import router from './router/routers'
+
 export default {
   name: 'CapsuleForm',
   data() {
