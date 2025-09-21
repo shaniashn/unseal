@@ -71,9 +71,11 @@ export default {
         const imagePath = await this.uploadImage()
 
         if (!imagePath) {
-          console.error('Error uploading image')
+          console.log('no image')
           return
         }
+
+        console.log('imgpath', imagePath)
 
         const response = await supabase.from('capsules').insert({
           user_id: userId,
@@ -86,13 +88,13 @@ export default {
         if (response.error) {
           console.error('Error sending msg', response.error)
         } else {
-          console.log('data capsule created. status code: ', response.status)
+          // console.log('data capsule created. status code: ', response.status)
           this.status = 'sent'
-          console.log('capsule sent successfully', this.status)
+          // console.log('capsule sent successfully', this.status)
           router.push('/home')
         }
       } catch (error) {
-        console.error('Error sending msg', error)
+        console.error('Error handling image', error)
       }
     },
     async checkUser() {
@@ -157,8 +159,8 @@ export default {
       try {
         //Upload to Firebase Storage
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('capsule_images')
-          .upload(`image/${this.image.name}`, this.image)
+          .from('images')
+          .upload(`${this.image.name}`, this.image)
 
         if (uploadError) {
           console.error('Upload failed:', uploadError)
@@ -166,27 +168,17 @@ export default {
 
         //Get public URL of the uploaded file
         const { data: publicUrlData } = await supabase.storage
-          .from('capsule_images')
+          .from('images')
           .getPublicUrl(uploadData.path)
 
         const imagePath = publicUrlData.publicUrl
         console.log('imagePath', imagePath)
+        console.log('uploadData.path', uploadData)
 
         return imagePath
-
-        //Insert image path to database
-        // const { data: dbData, error: dbError } = await supabase
-        //   .from('capsules')
-        //   .insert({ image: publicUrlData })
-
-        // if (dbError) {
-        //   console.error('Inser image path failed:', dbError)
-        // } else {
-        //   console.log('dbData', dbData)
-        // }
       } catch (error) {
         console.error('Error: ', error)
-        return null
+        return error
       }
     },
   },
