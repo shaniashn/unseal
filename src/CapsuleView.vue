@@ -1,14 +1,18 @@
 <template>
   <section class="message-section">
     <router-link to="/home">Back to home</router-link>
-
-    <div class="loading" v-if="loading">Loading..</div>
-    <div class="capsule-content" v-else-if="capsule">
-      <h3 class="capsule-title">{{ capsule.title }}</h3>
-      <p class="capsule-message">{{ capsule.message }}</p>
-      <p class="capsule-date">Open date: {{ capsule.to_open_at }}</p>
+    <div class="capsule-container">
+      <div class="loading" v-if="loading">Loading..</div>
+      <div class="capsule-content" v-else-if="capsule">
+        <div class="capsule-image-container">
+          <img :src="capsule.image" alt="capsule" />
+        </div>
+        <h3 class="capsule-title">{{ capsule.title }}</h3>
+        <p class="capsule-message">{{ capsule.message }}</p>
+        <!-- <p class="capsule-date">Opened at:</p> -->
+      </div>
+      <div class="error" v-else>Capsule not found or you don't have permission to view it.</div>
     </div>
-    <div class="error" v-else>Capsule not found or you don't have permission to view it.</div>
   </section>
 </template>
 
@@ -25,7 +29,6 @@ async function fetchCapsule() {
   try {
     loading.value = true
     const capsuleId = route.params.id
-    console.log('sss')
 
     if (!capsuleId) {
       console.log('capsule id not found')
@@ -51,6 +54,7 @@ async function fetchCapsule() {
       console.error('error getting capsule data', error)
     } else {
       capsule.value = data[0]
+      console.log('capsule.value: ', capsule.value)
     }
   } catch (error) {
     console.error(error)
@@ -66,22 +70,31 @@ onMounted(async () => {
 
 <style scoped>
 .message-section {
-  padding: 20px;
+  /* padding: 20px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0 auto; */
+
+  /* background-color: aqua; */
 }
 
-.back-link {
+.capsule-container {
+  /* padding: 20px; */
+  max-width: 600px;
+  margin: 0 auto;
+  /* background-color: aquamarine; */
+}
+
+/* .back-link {
   display: inline-block;
   margin-bottom: 20px;
   color: #007bff;
   text-decoration: none;
   font-weight: 500;
-}
+} */
 
-.back-link:hover {
+/* .back-link:hover {
   text-decoration: underline;
-}
+} */
 
 .capsule-content {
   background: white;
@@ -91,32 +104,46 @@ onMounted(async () => {
   margin-top: 20px;
 }
 
+.capsule-image-container {
+  display: grid;
+  justify-content: center;
+  width: 100%;
+}
+
+.capsule-image-container img {
+  padding: 20px;
+  max-width: 300px;
+  height: 300px;
+  /* object-fit: cover; */
+}
+
 .capsule-title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   color: #333;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
+  /* border-bottom: 2px solid #f0f0f0; */
+  /* padding-bottom: 10px; */
 }
 
 .capsule-message {
   font-size: 16px;
   line-height: 1.6;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   color: #555;
-  white-space: pre-wrap; /* Preserve line breaks */
-  word-wrap: break-word;
+  text-align: justify;
+  /* white-space: pre-wrap; */
+  /* word-wrap: break-word; */
 }
 
-.capsule-date {
+/* .capsule-date {
   font-size: 14px;
   color: #888;
   font-style: italic;
   text-align: right;
   border-top: 1px solid #f0f0f0;
   padding-top: 15px;
-}
+} */
 
 .loading {
   text-align: center;
