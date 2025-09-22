@@ -5,6 +5,7 @@
     <router-link to="/capsule-form">Create new capsule</router-link>
   </section>
   <section class="messages-container">
+    <div class="loading" v-if="false">Loading..</div>
     <div v-for="message in messages" :key="message.id" class="message-item">
       <p>{{ message.text }}</p>
       <p>{{ message.date }}</p>
@@ -72,7 +73,8 @@ export default {
             return {
               id: data.id,
               date: data.to_open_at,
-              isLocked: data.to_open_at < this.todayDate, //tanggal sekarang lebih besar dari to_open_at
+              // isLocked: data.to_open_at < this.todayDate, //tanggal sekarang lebih besar dari to_open_at
+              isLocked: true,
               status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
             }
           })
