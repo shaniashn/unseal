@@ -18,6 +18,7 @@
           id="title-message"
           v-model="title"
           placeholder="Write the title here"
+          value="hello"
           required
         />
         <input
@@ -25,6 +26,7 @@
           id="body-message"
           v-model="message"
           placeholder="Write your message here"
+          value="hello"
           required
         />
 
@@ -35,6 +37,7 @@
           name="date-open"
           id="date-open"
           :min="todayDate"
+          value="2025-09-24"
           required
         />
         <button type="submit" @click="sendMsg" :disabled="!fieldsCheck">Send message</button>
@@ -158,25 +161,62 @@ export default {
       }
 
       try {
-        //Upload to Firebase Storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('images')
-          .upload(`${this.image.name}`, this.image)
+        //Checks bucket
+        // const bucket = await supabase.storage.getBucket('image')
 
-        if (uploadError) {
-          console.error('Upload failed:', uploadError)
+        // if (bucket.error.status == 400) {
+        //   console.log(bucket)
+
+        //Create new bucket
+        const { data: successCreate, error: errorCreate } = await supabase.storage.createBucket(
+          'capsule_images',
+          {
+            public: false,
+          },
+        )
+
+        if (errorCreate) {
+          console.error('Error creating bucket', errorCreate)
+        } else {
+          console.log('success create bucket', successCreate)
         }
+        // } else {
+        //   console.log('bucket name', bucket)
+        // }
 
-        //Get public URL of the uploaded file
-        const { data: publicUrlData } = await supabase.storage
-          .from('images')
-          .getPublicUrl(uploadData.path)
+        //Create new bucket
+        // const { data: successCreate, error: errorCreate } = await supabase.storage.createBucket(
+        //   'capsule-image',
+        //   {
+        //     public: false,
+        //   },
+        // )
 
-        const imagePath = publicUrlData.publicUrl
-        console.log('imagePath', imagePath)
-        console.log('uploadData.path', uploadData)
+        // if (errorCreate) {
+        //   console.error('Error creating bucket', errorCreate)
+        // } else {
+        //   console.log('success create bucket', successCreate)
+        // }
 
-        return imagePath
+        //Upload to Firebase Storage
+        // const { data: uploadData, error: uploadError } = await supabase.storage
+        //   .from('capsule_images')
+        //   .upload(`${this.image.name}`, this.image)
+
+        // if (uploadError) {
+        //   console.error('Upload failed:', uploadError)
+        // }
+
+        // //Get public URL of the uploaded file
+        // const { data: publicUrlData } = await supabase.storage
+        //   .from('capsule_images')
+        //   .getPublicUrl(uploadData.path)
+
+        // const imagePath = publicUrlData.publicUrl
+        // console.log('imagePath', imagePath)
+        // console.log('uploadData.path', uploadData)
+
+        // return imagePath
       } catch (error) {
         console.error('Error: ', error)
         return error
