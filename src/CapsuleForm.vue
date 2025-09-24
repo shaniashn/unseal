@@ -11,7 +11,6 @@
       <form @submit.prevent="">
         <input type="image" :src="image" v-if="image" alt="image" />
         <input type="file" id="imageInput" accept="image/png, image/jpeg" @change="loadImage" />
-        <!-- <button type="submit" @click="uploadImage">upload img</button> -->
 
         <input
           type="text"
