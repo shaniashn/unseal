@@ -155,6 +155,10 @@ export default {
       this.image = input.files[0]
       console.log('image ', this.image.name)
 
+      const fileExtension = this.image.name.split('.').pop()
+
+      const newFileName = `${crypto.randomUUID()}.${fileExtension}`
+
       if (!input.files) {
         return
       }
@@ -163,22 +167,22 @@ export default {
         //Upload to Firebase Storage
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('capsule_image')
-          .upload(`${this.image.name}`, this.image)
+          .upload(`${newFileName}`, this.image)
 
         if (uploadError) {
           console.error('Upload failed:', uploadError)
+        } else {
+          //Get public URL of the uploaded file
+          const { data: publicUrlData } = await supabase.storage
+            .from('capsule_image')
+            .getPublicUrl(uploadData.path)
+
+          const imagePath = publicUrlData.publicUrl
+          console.log('imagePath', imagePath)
+          console.log('uploadData.path', uploadData.path)
+
+          return imagePath
         }
-
-        //Get public URL of the uploaded file
-        const { data: publicUrlData } = await supabase.storage
-          .from('capsule_image')
-          .getPublicUrl(uploadData.path)
-
-        const imagePath = publicUrlData.publicUrl
-        console.log('imagePath', imagePath)
-        console.log('uploadData.path', uploadData)
-
-        return imagePath
       } catch (error) {
         console.error('Error: ', error)
         return error
