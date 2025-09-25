@@ -160,62 +160,25 @@ export default {
       }
 
       try {
-        //Checks bucket
-        // const bucket = await supabase.storage.getBucket('image')
-
-        // if (bucket.error.status == 400) {
-        //   console.log(bucket)
-
-        //Create new bucket
-        const { data: successCreate, error: errorCreate } = await supabase.storage.createBucket(
-          'capsule_images',
-          {
-            public: false,
-          },
-        )
-
-        if (errorCreate) {
-          console.error('Error creating bucket', errorCreate)
-        } else {
-          console.log('success create bucket', successCreate)
-        }
-        // } else {
-        //   console.log('bucket name', bucket)
-        // }
-
-        //Create new bucket
-        // const { data: successCreate, error: errorCreate } = await supabase.storage.createBucket(
-        //   'capsule-image',
-        //   {
-        //     public: false,
-        //   },
-        // )
-
-        // if (errorCreate) {
-        //   console.error('Error creating bucket', errorCreate)
-        // } else {
-        //   console.log('success create bucket', successCreate)
-        // }
-
         //Upload to Firebase Storage
-        // const { data: uploadData, error: uploadError } = await supabase.storage
-        //   .from('capsule_images')
-        //   .upload(`${this.image.name}`, this.image)
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('capsule_image')
+          .upload(`${this.image.name}`, this.image)
 
-        // if (uploadError) {
-        //   console.error('Upload failed:', uploadError)
-        // }
+        if (uploadError) {
+          console.error('Upload failed:', uploadError)
+        }
 
-        // //Get public URL of the uploaded file
-        // const { data: publicUrlData } = await supabase.storage
-        //   .from('capsule_images')
-        //   .getPublicUrl(uploadData.path)
+        //Get public URL of the uploaded file
+        const { data: publicUrlData } = await supabase.storage
+          .from('capsule_image')
+          .getPublicUrl(uploadData.path)
 
-        // const imagePath = publicUrlData.publicUrl
-        // console.log('imagePath', imagePath)
-        // console.log('uploadData.path', uploadData)
+        const imagePath = publicUrlData.publicUrl
+        console.log('imagePath', imagePath)
+        console.log('uploadData.path', uploadData)
 
-        // return imagePath
+        return imagePath
       } catch (error) {
         console.error('Error: ', error)
         return error
