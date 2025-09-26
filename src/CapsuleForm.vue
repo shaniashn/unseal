@@ -167,7 +167,7 @@ export default {
         //Upload to Firebase Storage
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('capsule_images')
-          .upload(`images${newFileName}`, this.image)
+          .upload(`images/${newFileName}`, this.image)
 
         if (uploadError) {
           console.error('Upload failed:', uploadError)
