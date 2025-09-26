@@ -166,15 +166,15 @@ export default {
       try {
         //Upload to Firebase Storage
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('capsule_image')
-          .upload(`${newFileName}`, this.image)
+          .from('capsule_images')
+          .upload(`images${newFileName}`, this.image)
 
         if (uploadError) {
           console.error('Upload failed:', uploadError)
         } else {
           //Get public URL of the uploaded file
           const { data: publicUrlData } = await supabase.storage
-            .from('capsule_image')
+            .from('capsule_images')
             .getPublicUrl(uploadData.path)
 
           const imagePath = publicUrlData.publicUrl
