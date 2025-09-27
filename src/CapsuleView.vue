@@ -9,7 +9,6 @@
         </div>
         <h3 class="capsule-title">{{ capsule.title }}</h3>
         <p class="capsule-message">{{ capsule.message }}</p>
-        <!-- <p class="capsule-date">Opened at:</p> -->
       </div>
       <div class="error" v-else>Capsule not found or you don't have permission to view it.</div>
     </div>
