@@ -80,20 +80,7 @@ onMounted(async () => {
   /* padding: 20px; */
   max-width: 600px;
   margin: 0 auto;
-  /* background-color: aquamarine; */
 }
-
-/* .back-link {
-  display: inline-block;
-  margin-bottom: 20px;
-  color: #007bff;
-  text-decoration: none;
-  font-weight: 500;
-} */
-
-/* .back-link:hover {
-  text-decoration: underline;
-} */
 
 .capsule-content {
   background: white;
@@ -131,8 +118,8 @@ onMounted(async () => {
   /* margin-bottom: 20px; */
   color: #555;
   text-align: justify;
-  /* white-space: pre-wrap; */
-  /* word-wrap: break-word; */
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 /* .capsule-date {
