@@ -91,9 +91,7 @@ export default {
         if (response.error) {
           console.error('Error sending msg', response.error)
         } else {
-          // console.log('data capsule created. status code: ', response.status)
           this.status = 'sent'
-          // console.log('capsule sent successfully', this.status)
           router.push('/home')
         }
       } catch (error) {
@@ -131,7 +129,6 @@ export default {
       }
     },
     loadImage(event) {
-      // this.image = event.target.files[0]
       const reader = new FileReader()
 
       reader.addEventListener('load', () => {
@@ -139,16 +136,6 @@ export default {
       })
 
       reader.readAsDataURL(event.target.files[0])
-
-      // const input = document.getElementById('imageInput')
-      // const reader = new FileReader()
-
-      // reader.onload = () => {
-
-      //   this.image = reader.result
-      // }
-
-      // reader.readAsDataURL(input.files[0])
     },
     async uploadImage() {
       const input = document.getElementById('imageInput')
