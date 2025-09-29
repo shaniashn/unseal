@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from './lib/supabaseClient'
-// import router from './router/routers'
 import { useRouter } from 'vue-router'
 
 const session = ref()
