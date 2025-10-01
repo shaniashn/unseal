@@ -12,8 +12,6 @@ onMounted(() => {
   supabase.auth.getSession().then(({ data, error }) => {
     try {
       session.value = data.session
-      // console.log('app - session', session.value)
-      // console.log('app - data', data)
     } catch {
       console.error('Error getting session: ', error)
     }
