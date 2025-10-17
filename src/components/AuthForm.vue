@@ -106,8 +106,6 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        console.log('click')
-
         if (this.isRegister) {
           const response = await supabase.auth.signUp({
             email: this.signUpFormData.email,
@@ -116,7 +114,7 @@ export default {
               data: {
                 username: this.signUpFormData.username,
                 full_name: this.signUpFormData.full_name,
-                avatar_url: this.signUpFormData.avatar_url,
+                // avatar_url: this.signUpFormData.avatar_url,
               },
             },
           })
