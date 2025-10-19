@@ -114,7 +114,7 @@ export default {
               data: {
                 username: this.signUpFormData.username,
                 full_name: this.signUpFormData.full_name,
-                // avatar_url: this.signUpFormData.avatar_url,
+                avatar_url: this.signUpFormData.avatar_url,
               },
             },
           })
