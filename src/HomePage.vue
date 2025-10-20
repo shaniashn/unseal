@@ -73,8 +73,8 @@ export default {
             return {
               id: data.id,
               date: data.to_open_at,
-              // isLocked: data.to_open_at < this.todayDate, //tanggal sekarang lebih besar dari to_open_at
-              isLocked: true,
+              isLocked: data.to_open_at < this.todayDate, //tanggal sekarang lebih besar dari to_open_at
+              // isLocked: true,
               status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
             }
           })
