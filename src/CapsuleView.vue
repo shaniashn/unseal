@@ -100,22 +100,18 @@ onMounted(async () => {
   padding: 20px;
   max-width: 300px;
   height: 300px;
-  /* object-fit: cover; */
+  object-fit: contain;
 }
 
 .capsule-title {
   font-size: 24px;
   font-weight: bold;
-  /* margin-bottom: 20px; */
   color: #333;
-  /* border-bottom: 2px solid #f0f0f0; */
-  /* padding-bottom: 10px; */
 }
 
 .capsule-message {
   font-size: 16px;
   line-height: 1.6;
-  /* margin-bottom: 20px; */
   color: #555;
   text-align: justify;
   white-space: pre-wrap;
