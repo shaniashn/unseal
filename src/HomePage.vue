@@ -64,7 +64,7 @@ export default {
         const { data: msg, error } = await supabase
           .from('capsules')
           .select('*') // Select all fields including title and message
-          .eq('user_id', userId.data.user.id)
+          .eq('user_id', userId.data.user.id) //eq means equals to
 
         if (error) {
           console.log('error:', error)
@@ -78,6 +78,8 @@ export default {
               status: data.isLocked ? Text.LOCKED : Text.UNLOCKED,
             }
           })
+
+          console.log(this.messages);
         }
       } catch (error) {
         console.error('Error fetching messages', error)
