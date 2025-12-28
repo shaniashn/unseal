@@ -12,33 +12,14 @@
         <input type="image" :src="image" v-if="image" alt="image" />
         <input type="file" id="imageInput" accept="image/png, image/jpeg" @change="loadImage" />
 
-        <input
-          type="text"
-          id="title-message"
-          v-model="title"
-          placeholder="Write the title here"
-          value="hello"
-          required
-        />
-        <input
-          type="text"
-          id="body-message"
-          v-model="message"
-          placeholder="Write your message here"
-          value="hello"
-          required
-        />
+        <input type="text" id="title-message" v-model="title" placeholder="Write the title here" value="hello"
+          required />
+        <input type="text" id="body-message" v-model="message" placeholder="Write your message here" value="hello"
+          required />
 
         <span>Open date</span>
-        <input
-          v-model="date"
-          type="date"
-          name="date-open"
-          id="date-open"
-          :min="todayDate"
-          value="2025-09-24"
-          required
-        />
+        <input v-model="date" type="date" name="date-open" id="date-open" :min="todayDate" value="2025-09-24"
+          required />
         <button type="submit" @click="sendMsg" :disabled="!fieldsCheck">Send message</button>
       </form>
     </div>
@@ -142,7 +123,7 @@ export default {
       this.image = input.files[0]
       console.log('image ', this.image.name)
 
-      const fileExtension = this.image.name.split('.').pop()
+      const fileExtension = this.image.name.split('.').pop() //to separate between filename and its extension into array, then pops out the last index which is the extension
 
       const newFileName = `${crypto.randomUUID()}.${fileExtension}`
 
@@ -181,14 +162,15 @@ export default {
       return this.title && this.message && this.date
     },
     todayDate() {
-      const today = new Date()
-      const year = today.getFullYear()
-      const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
-      const day = String(today.getDate() + 1).padStart(2, '0')
-      return `${year}-${month}-${day}`
+      // const today = new Date()
+      // const year = today.getFullYear()
+      // const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
+      // const day = String(today.getDate() + 1).padStart(2, '0')
+      // return `${year}-${month}-${day}`
+      return new Date()
     },
   },
-  mounted() {},
+  mounted() { },
 }
 </script>
 
