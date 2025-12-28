@@ -23,29 +23,25 @@ import { onMounted, ref } from 'vue'
 const route = useRoute()
 const capsule = ref('')
 const loading = ref('')
+const capsuleId = route.params.id
 
 async function fetchCapsule() {
   try {
     loading.value = true
-    const capsuleId = route.params.id
 
     if (!capsuleId) {
       console.log('capsule id not found')
       return
     }
 
-    const { data: userData, error: userError } = await supabase.auth.getUser()
-
-    if (userError) {
-      console.error('error getting user', userError)
-      return
-    }
+    const user = await getCurrentUser()
+    if (!user) return
 
     const { data, error } = await supabase
       .from('capsules')
       .select()
       .eq('id', capsuleId)
-      .eq('user_id', userData.user.id)
+      .eq('user_id', user.id)
 
     console.log('data', data)
 
@@ -62,8 +58,44 @@ async function fetchCapsule() {
   }
 }
 
+async function getOpenedDate() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
+  const day = String(today.getDate()).padStart(2, '0')
+  const todayDate = `${year}-${month}-${day}`
+
+  const user = await getCurrentUser()
+  if (!user) return
+
+  const response = await supabase
+    .from('capsules')
+    .update({ date_opened: todayDate })
+    .eq('user_id', user.id)
+    .eq('id', capsuleId)
+    .is('date_opened', null)
+
+  if (response.error) {
+    console.error("insert date failed");
+  } else {
+    console.log("date inserted")
+  }
+}
+
+async function getCurrentUser() {
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+
+  if (userError) {
+    console.log('error getting user', userError);
+    return
+  }
+
+  return userData.user
+}
+
 onMounted(async () => {
   await fetchCapsule()
+  await getOpenedDate()
 })
 </script>
 
