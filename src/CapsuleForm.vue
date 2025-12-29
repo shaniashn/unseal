@@ -1,11 +1,11 @@
 <template>
-  <section v-if="status == 'sent'">
+  <section v-if="stat == 'sent'">
     <div class="sent-text">
       <p>Capsule sent successfully to the future!</p>
       <p>Capsule can be opened on {{ date }}</p>
     </div>
   </section>
-  <section class="capsule-form-page" v-else-if="status == 'editing'">
+  <section class="capsule-form-page" v-else-if="stat == 'editing'">
     <router-link to="/home">back to home</router-link>
     <div class="capsule-container">
       <form @submit.prevent="">
@@ -36,7 +36,7 @@ export default {
     return {
       title: '',
       message: '',
-      status: 'editing',
+      stat: 'editing',
       date: '',
       loading: false,
       image: '',
@@ -72,7 +72,7 @@ export default {
         if (response.error) {
           console.error('Error sending msg', response.error)
         } else {
-          this.status = 'sent'
+          this.stat = 'sent'
           router.push('/home')
         }
       } catch (error) {
