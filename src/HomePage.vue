@@ -2,6 +2,7 @@
   <section>
     Hi {{ fullname }}
     <button @click="signOut">Sign Out</button>
+    <br>
     <router-link to="/capsule-form">Create new capsule</router-link>
   </section>
   <section class="messages-container">
