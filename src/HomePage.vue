@@ -64,7 +64,7 @@ export default {
 
         const { data: msg, error } = await supabase
           .from('capsules')
-          .select('*') // Select all fields including title and message
+          .select('id, to_open_at') // Select all fields including title and message
           .eq('user_id', userId.data.user.id) //eq means equals to
 
         if (error) {
