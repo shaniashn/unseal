@@ -65,6 +65,7 @@ export default {
           user_id: userId,
           title: this.title,
           message: this.message,
+          // message: pgp_sym_encrypt('secretkey112', this.message),
           to_open_at: this.date,
           image: imagePath,
         })
