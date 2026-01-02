@@ -28,7 +28,7 @@
 
 <script>
 import { supabase } from './lib/supabaseClient'
-import router from './router/routers'
+// import router from './router/routers'
 
 export default {
   name: 'CapsuleForm',
@@ -61,20 +61,29 @@ export default {
 
         console.log('imgpath', imagePath)
 
-        const response = await supabase.from('capsules').insert({
-          user_id: userId,
-          title: this.title,
-          message: this.message,
-          // message: pgp_sym_encrypt('secretkey112', this.message),
-          to_open_at: this.date,
-          image: imagePath,
-        })
+        // const response = await supabase.from('capsules').insert({
+        //   user_id: userId,
+        //   title: this.title,
+        //   message: this.message,
+        //   // message: pgp_sym_encrypt('secretkey112', this.message),
+        //   to_open_at: this.date,
+        //   image: imagePath,
+        // })
 
-        if (response.error) {
-          console.error('Error sending msg', response.error)
+        // if (response.error) {
+        //   console.error('Error sending msg', response.error)
+        // } else {
+        //   this.stat = 'sent'
+        //   router.push('/home')
+        // }
+
+        const { data, error } = await supabase.rpc('encrypt_msg', { user_id: userId, message: "hii", title: "title", to_open_at: this.date, image: imagePath })
+
+        if (error) {
+          console.error('encrypt msg error', error);
         } else {
-          this.stat = 'sent'
-          router.push('/home')
+          console.log("this data:", data);
+
         }
       } catch (error) {
         console.error('Error handling image', error)
