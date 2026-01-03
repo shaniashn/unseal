@@ -170,12 +170,11 @@ export default {
       return this.title && this.message && this.date
     },
     todayDate() {
-      // const today = new Date()
-      // const year = today.getFullYear()
-      // const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
-      // const day = String(today.getDate() + 1).padStart(2, '0')
-      // return `${year}-${month}-${day}`
-      return new Date()
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
+      const day = String(today.getDate() + 1).padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
   },
   mounted() { },
