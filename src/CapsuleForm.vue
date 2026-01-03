@@ -77,14 +77,12 @@ export default {
         //   router.push('/home')
         // }
 
-        const { data, error } = await supabase.rpc('encrypt_msg', { user_id: userId, message: "hii", title: "title", to_open_at: this.date, image: imagePath })
+        const response = await supabase.rpc('encrypt_msg', { user_id: userId, message: this.message, title: this.title, to_open_at: this.date, image: imagePath })
 
-        if (error) {
-          console.error('encrypt msg error', error);
-        } else {
-          console.log("this data:", data);
-
+        if (response.error) {
+          console.error('encrypt msg error', response.error);
         }
+
       } catch (error) {
         console.error('Error handling image', error)
       }
