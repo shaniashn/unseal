@@ -37,20 +37,28 @@ async function fetchCapsule() {
     const user = await getCurrentUser()
     if (!user) return
 
-    const { data, error } = await supabase
-      .from('capsules')
-      .select()
-      .eq('id', capsuleId)
-      .eq('user_id', user.id)
+    // const { data, error } = await supabase
+    //   .from('capsules')
+    //   .select()
+    //   .eq('id', capsuleId)
+    //   .eq('user_id', user.id)
 
-    console.log('data', data)
+    // console.log('data', data)
+    const userid = await supabase.auth.getUser()
+    console.log("usr", userid);
 
-    if (error) {
-      console.error('error getting capsule data', error)
-    } else {
-      capsule.value = data[0]
-      console.log('capsule.value: ', capsule.value)
-    }
+
+    const response = await supabase.rpc('decrypt_msg', { arg_user_id: userid.data.user.id, message_id: capsuleId })
+
+    console.log("g", response.error);
+    console.log("h", response.data);
+
+    // if (error) {
+    //   console.error('error getting capsule data', error)
+    // } else {
+    //   capsule.value = data[0]
+    //   console.log('capsule.value: ', capsule.value)
+    // }
   } catch (error) {
     console.error(error)
   } finally {
