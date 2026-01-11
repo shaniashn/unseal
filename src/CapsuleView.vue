@@ -7,8 +7,8 @@
         <div class="capsule-image-container">
           <img :src="capsule.image" alt="capsule" />
         </div>
-        <h3 class="capsule-title">{{ capsule.title }}</h3>
-        <p class="capsule-message">{{ capsule.message }}</p>
+        <h3 class="capsule-title">{{ capsule.dtitle }}</h3>
+        <p class="capsule-message">{{ capsule.dmessage }}</p>
       </div>
       <div class="error" v-else>Capsule not found or you don't have permission to view it.</div>
     </div>
@@ -46,19 +46,23 @@ async function fetchCapsule() {
     // console.log('data', data)
     const userid = await supabase.auth.getUser()
     console.log("usr", userid);
+    console.log("userid", userid.data.user.id);
+    console.log("capsuleid", capsuleId);
 
 
-    const response = await supabase.rpc('decrypt_msg', { arg_user_id: userid.data.user.id, message_id: capsuleId })
 
-    console.log("g", response.error);
-    console.log("h", response.data);
+    const { data, error } = await supabase.rpc('decrypt_msg', { arg_user_id: userid.data.user.id, message_id: capsuleId })
 
-    // if (error) {
-    //   console.error('error getting capsule data', error)
-    // } else {
-    //   capsule.value = data[0]
-    //   console.log('capsule.value: ', capsule.value)
-    // }
+    // console.log("g", error);
+    // console.log("h", data);
+    // capsule.value = response.data[0];
+
+    if (error) {
+      console.error('error getting capsule data', error)
+    } else {
+      capsule.value = data[0]
+      console.log('capsule.value: ', capsule.value)
+    }
   } catch (error) {
     console.error(error)
   } finally {
