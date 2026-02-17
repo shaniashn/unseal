@@ -18,8 +18,7 @@
           required />
 
         <span>Open date</span>
-        <input v-model="date" type="date" name="date-open" id="date-open" :min="todayDate" value="2025-09-24"
-          required />
+        <input v-model="date" type="date" name="date-open" id="date-open" :min="todayDate" required />
         <button type="submit" @click="sendMsg" :disabled="!fieldsCheck">Send message</button>
       </form>
     </div>
@@ -173,11 +172,13 @@ export default {
       return this.title && this.message && this.date
     },
     todayDate() {
-      const today = new Date()
-      const year = today.getFullYear()
-      const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
-      const day = String(today.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
+      // const today = new Date()
+      // const year = today.getFullYear()
+      // const month = String(today.getMonth() + 1).padStart(2, '0') // +1 because getMonth() is 0-indexed
+      // const day = String(today.getDate()).padStart(2, '0')
+      // return `${year}-${month}-${day}`
+
+      return new Date().toISOString().split('T')[0]
     },
   },
   mounted() { },
