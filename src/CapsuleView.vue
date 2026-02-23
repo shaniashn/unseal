@@ -49,6 +49,10 @@ async function fetchCapsule() {
     console.log("userid", userid.data.user.id);
     console.log("capsuleid", capsuleId);
 
+    const userny = await supabase.auth.admin.getUserById('8638b7be-3602-42c3-81fe-2b181a371de9')
+    console.log("ini userny", userny);
+
+
 
 
     const { data, error } = await supabase.rpc('decrypt_msg', { arg_user_id: userid.data.user.id, message_id: capsuleId })
